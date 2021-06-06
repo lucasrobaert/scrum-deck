@@ -24,6 +24,46 @@ class SprintWidget extends StatelessWidget {
                   return ListTile(
                     title: Text(sprint.nome),
                     subtitle: Text(sprint.link),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      color: Colors.red,
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text('Deseja excluir a sprint: ${sprint.nome} ?'),
+                              content: Text("Essa ação não poderá ser desfeita"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: Text('Não')
+                                ),
+                                TextButton(
+                                    onPressed: () => Navigator.of(context).pop(true),
+                                    child: Text('Sim')
+                                )
+                              ],
+                            )
+                        ).then((confirmed) => {
+                          if(confirmed){
+                            _bloc.doDelete(sprint.id).then(
+                                (_) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Sprint deletada!'))
+                                  );
+                                  _bloc.doFetch();
+                                }
+                            ).catchError(
+                                (_) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Opps! Aconteceu algum erro, por favor, tente novamente!'))
+                                  );
+                                }
+                            )
+                          }
+                        });
+                      },
+                    ),
                   );
                 },
                 separatorBuilder: (_, __) => Divider(),
@@ -40,6 +80,24 @@ class SprintWidget extends StatelessWidget {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text('Não implementado ainda!'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('ok'),
+                )
+              ],
+            )
+          );
+        },
+        child: const Icon(Icons.add, color: Colors.white,),
+        backgroundColor: Colors.green,
       ),
     );
   }

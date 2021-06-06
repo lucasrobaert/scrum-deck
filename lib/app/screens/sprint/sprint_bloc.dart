@@ -23,6 +23,10 @@ class SprintBloc extends BlocBase{
     _sprintFetcher.sink.add(sprints);
   }
 
+  doDelete(int sprintId) async{
+    await _api.deleteSprint(sprintId);
+  }
+
 
   @override
   void dispose() {

@@ -21,4 +21,14 @@ class SprintApi{
     }
   }
 
+  Future deleteSprint(int sprintId) async {
+    final response = await _client.delete(Uri.parse('${Constants.API_BASE_URL}/sprint/$sprintId'));
+
+    if(response.statusCode == 204 ){
+      return true;
+    }else{
+      throw Exception('Opps! Erro ao deletar sprint');
+    }
+  }
+
 }
