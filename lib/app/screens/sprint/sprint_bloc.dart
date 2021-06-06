@@ -27,6 +27,10 @@ class SprintBloc extends BlocBase{
     await _api.deleteSprint(sprintId);
   }
 
+  doCreate(String name, String link) async {
+    await _api.createSprint(name, link);
+  }
+
 
   @override
   void dispose() {

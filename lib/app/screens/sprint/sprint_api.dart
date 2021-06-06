@@ -31,4 +31,23 @@ class SprintApi{
     }
   }
 
+  Future createSprint(String name, String link) async{
+    final response = await _client.post(
+      Uri.parse('${Constants.API_BASE_URL}/sprint'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode({
+        'nome': name,
+        'link': link
+      })
+    );
+
+    if(response.statusCode == 201){
+      return true;
+    }else {
+      throw Exception('Erro ao inserir a sprint');
+    }
+  }
+
 }

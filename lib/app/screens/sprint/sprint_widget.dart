@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:scrum_deck/app/screens/sprint/sprint_bloc.dart';
+import 'package:scrum_deck/app/screens/sprint/sprint_form.dart';
 import 'package:scrum_deck/app/screens/sprint/sprint_module.dart';
 import 'package:scrum_deck/app/shared/models/sprint.dart';
 
@@ -129,17 +130,11 @@ class _SprintPageState extends State<SprintPage> {
         visible: _isVisible,
         child: FloatingActionButton(
           onPressed: (){
-            showDialog(
+            showModalBottomSheet(
                 context: context,
-                builder: (ctx) => AlertDialog(
-                  title: Text('Não implementado ainda!'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: Text('ok'),
-                    )
-                  ],
-                )
+                builder: (context){
+                  return SprintForm();
+                }
             );
           },
           child: const Icon(Icons.add, color: Colors.white,),
