@@ -15,7 +15,6 @@ class SprintWidget extends StatelessWidget {
       body: SprintPage(),
     );
   }
-
 }
 
 class SprintPage extends StatefulWidget {
@@ -29,26 +28,29 @@ class _SprintPageState extends State<SprintPage> {
   late ScrollController _hideButtonController;
 
   @override
-  initState(){
+  initState() {
     super.initState();
     _isVisible = true;
     _hideButtonController = new ScrollController();
-    _hideButtonController.addListener((){
-      if(_hideButtonController.position.userScrollDirection == ScrollDirection.reverse){
-        if(_isVisible == true) {
-          setState((){
+    _hideButtonController.addListener(() {
+      if (_hideButtonController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_isVisible == true) {
+          setState(() {
             _isVisible = false;
           });
         }
       } else {
-        if(_hideButtonController.position.userScrollDirection == ScrollDirection.forward){
-          if(_isVisible == false) {
-            setState((){
+        if (_hideButtonController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          if (_isVisible == false) {
+            setState(() {
               _isVisible = true;
             });
           }
         }
-      }});
+      }
+    });
   }
 
   @override
@@ -75,37 +77,45 @@ class _SprintPageState extends State<SprintPage> {
                           showDialog(
                               context: context,
                               builder: (ctx) => AlertDialog(
-                                title: Text('Deseja excluir a sprint: ${sprint.nome} ?'),
-                                content: Text("Essa ação não poderá ser desfeita"),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () => Navigator.of(context).pop(false),
-                                      child: Text('Não')
-                                  ),
-                                  TextButton(
-                                      onPressed: () => Navigator.of(context).pop(true),
-                                      child: Text('Sim')
-                                  )
-                                ],
-                              )
-                          ).then((confirmed) => {
-                            if(confirmed){
-                              _bloc.doDelete(sprint.id).then(
-                                      (_) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('Sprint deletada!'))
-                                    );
-                                    _bloc.doFetch();
+                                    title: Text(
+                                        'Deseja excluir a sprint: ${sprint.nome} ?'),
+                                    content: Text(
+                                        "Essa ação não poderá ser desfeita"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: Text('Não')),
+                                      TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(true),
+                                          child: Text('Sim'))
+                                    ],
+                                  )).then((confirmed) => {
+                                if (confirmed)
+                                  {
+                                    _bloc.doDelete(sprint.id).then((_) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                          'Sprint deletada!',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.green,
+                                      ));
+                                      _bloc.doFetch();
+                                    }).catchError((_) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                          'Opps! Aconteceu algum erro, por favor, tente novamente!',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ));
+                                    })
                                   }
-                              ).catchError(
-                                      (_) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('Opps! Aconteceu algum erro, por favor, tente novamente!'))
-                                    );
-                                  }
-                              )
-                            }
-                          });
+                              });
                         },
                       ),
                     );
@@ -116,9 +126,9 @@ class _SprintPageState extends State<SprintPage> {
           }
           return StreamBuilder(
             stream: _bloc.loading,
-            builder: (context, AsyncSnapshot<bool> snapshot){
+            builder: (context, AsyncSnapshot<bool> snapshot) {
               final loading = snapshot.data ?? false;
-              if(loading){
+              if (loading) {
                 return Center(child: CircularProgressIndicator());
               }
               return Container();
@@ -129,20 +139,20 @@ class _SprintPageState extends State<SprintPage> {
       floatingActionButton: Visibility(
         visible: _isVisible,
         child: FloatingActionButton(
-          onPressed: (){
+          onPressed: () {
             showModalBottomSheet(
                 context: context,
-                builder: (context){
+                builder: (context) {
                   return SprintForm();
-                }
-            );
+                });
           },
-          child: const Icon(Icons.add, color: Colors.white,),
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
           backgroundColor: Colors.green,
         ),
       ),
     );
   }
 }
-
-
