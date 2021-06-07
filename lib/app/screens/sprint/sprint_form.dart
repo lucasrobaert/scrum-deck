@@ -19,6 +19,8 @@ class _SprintFormPageState extends State<SprintFormPage> {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
+    final ValueKey<String> _nameKey = ValueKey('name');
+    final ValueKey<String> _linkKey = ValueKey('link');
     String _nameSprint = '';
     String _linkSprint = '';
 
@@ -56,41 +58,47 @@ class _SprintFormPageState extends State<SprintFormPage> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(15),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: nameController,
-                decoration: InputDecoration(labelText: 'Nome da Sprint'),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'O nome não pode ser vazio';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _nameSprint = value!,
-              ),
-              TextFormField(
-                controller: linkController,
-                decoration: InputDecoration(labelText: 'Link da Sprint'),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'A url não pode ser vazia';
-                  }
-                  if (!Uri.parse(value).isAbsolute) {
-                    return 'Informe uma url válida';
-                  }
+            padding: EdgeInsets.all(15),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    autofocus: true,
+                    key: _nameKey,
+                    textInputAction: TextInputAction.next,
+                    controller: nameController,
+                    decoration: InputDecoration(labelText: 'Nome da Sprint'),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'O nome não pode ser vazio';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) => _nameSprint = value!,
+                  ),
+                  TextFormField(
+                    key: _linkKey,
+                    textInputAction: TextInputAction.done,
+                    keyboardType: TextInputType.url,
+                    controller: linkController,
+                    decoration: InputDecoration(labelText: 'Link da Sprint'),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'A url não pode ser vazia';
+                      }
+                      if (!Uri.parse(value).isAbsolute) {
+                        return 'Informe uma url válida';
+                      }
 
-                  return null;
-                },
-                onSaved: (value) => _linkSprint = value!,
-              )
-            ],
+                      return null;
+                    },
+                    onSaved: (value) => _linkSprint = value!,
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+      );
   }
 }

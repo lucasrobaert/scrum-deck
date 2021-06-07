@@ -140,11 +140,7 @@ class _SprintPageState extends State<SprintPage> {
         visible: _isVisible,
         child: FloatingActionButton(
           onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return SprintForm();
-                });
+            Navigator.pushNamed(context, '/sprintform');
           },
           child: const Icon(
             Icons.add,
